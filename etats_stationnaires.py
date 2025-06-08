@@ -31,16 +31,21 @@ energies, psi = eigh(H, subset_by_index=[0, num_states - 1]) # diagonalisation
 
 # --- normalisation des états ---
 areas = []
+transmissions = []
+borne = int(1.0 / dx)  # x = 1.0
 for n in range(num_states):    
     psi[:, n] = psi[:, n] / np.sqrt(np.sum(np.abs(psi[:, n])**2) * dx)
     area = np.sum(psi[:, n]**2) * dx
+    trans = np.sum(psi[borne:, n]**2) * dx
     areas.append(area)
+    transmissions.append(trans)
 
 # --- génération du graphique ---
 plt.figure(figsize=(10, 6))
 for n in range(num_states):
     # plt.plot(x, psi[:, n]**2 + energies[n], label=f"État {n}, E={energies[n]:.2f}")
-    plt.plot(x, psi[:, n]**2, label=f"État {n}, E={energies[n]:.2f}, Aire={areas[n]:.3f}")
+    plt.plot(x, psi[:, n]**2, label=f"État {n}, E={energies[n]:.2f}, Aire={areas[n]:.3f}, T={transmissions[n]:.2f}")
+    #plt.plot(x, psi[:, n], label=f"État {n}, E={energies[n]:.2f}, Aire={areas[n]:.3f}")
 # plt.plot(x, V, 'k--', label="Potentiel")
 plt.plot(x, V / np.abs(np.min(V)) * np.max(psi[:, 0]**2), linestyle='--', label="Potentiel", color="orange")
 plt.xlabel("x")
