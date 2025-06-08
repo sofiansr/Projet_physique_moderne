@@ -17,7 +17,7 @@ def animate(j):
 dt=1E-7
 dx=0.001
 nx=int(1/dx)*2
-nt=90000 # En fonction du potentiel il faut modifier ce parametre car sur certaines animations la particule atteins les bords
+nt=50000 # En fonction du potentiel il faut modifier ce parametre car sur certaines animations la particule atteins les bords
 nd=int(nt/1000)+1#nombre d image dans notre animation
 n_frame = nd
 s=dt/(dx**2)
@@ -70,6 +70,7 @@ b=np.zeros(nx)
 im=np.zeros(nx)
 im[:]=np.imag(cpt[:])
 
+# équation de Schrödinger dépendante du temps 
 it=0
 for i in range(1, nt):
     if i % 2 != 0:
@@ -79,10 +80,14 @@ for i in range(1, nt):
     else:
         re[1:-1] = re[1:-1] - s * (im[2:] + im[:-2]) + 2 * im[1:-1] * (s + V[1:-1] * dt)
 
+# prélève quelques images de la densité de proba ((ψ(x,t))²) pour l'animation
 for i in range(1,nt):
     if((i-1)%1000==0):
         it+=1
         final_densite[it][:]=densite[i][:]
+
+
+# autres algos pour Schrödinger :
 
 # it=0
 # for i in range(1, nt):
